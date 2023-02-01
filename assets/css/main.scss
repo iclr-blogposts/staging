@@ -13,3 +13,43 @@ $max-content-width: {{ site.max_width }};
   "base",
   "distill"
 ;
+
+figure {
+  float: center;
+  // width: 30%;
+  text-align: center;
+  font-style: italic;
+  font-size: smaller;
+  text-indent: 0;
+  // border: thin silver solid;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+figure1 {
+  float: center;
+  // width: 30%;
+  text-align: center;
+  font-style: italic;
+  font-size: smaller;
+  text-indent: 0;
+  // border: thin silver solid;
+  margin: -2.5em;
+  padding: 0.5em;
+}
+
+callout {
+  float: center;
+  // width: 30%;
+  // text-align: center;
+  // font-style: italic;
+  font-size: smaller;
+  color:#8f8b8b;
+  // text-indent: 0;
+  text-align: justify;
+  // border: thin silver solid;
+  margin: 1px 60px 1px 60px;
+  // margin-left: 5em;
+  // padding: 2.5em;
+  display:inline-block
+}
