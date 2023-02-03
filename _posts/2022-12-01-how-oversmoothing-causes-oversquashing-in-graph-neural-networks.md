@@ -10,7 +10,7 @@ authors:
   - name: Anonymous
 
 # must be the exact same name as your blogpost
-bibliography: 2022-12-01-how-oversmoothing-causes-oversquashing-in-graph-neural-networks.bib  
+bibliography: 2022-12-01-how-oversmoothing-influences-oversquashing-in-graph-neural-networks.bib  
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
