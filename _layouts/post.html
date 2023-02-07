@@ -44,7 +44,7 @@ layout: default
   </article>
 
   {%- if site.disqus_shortname and page.comments -%}
-    <div id="disqus_thread"></div>
+    <div id="disqus_thread" style="max-width: {{ site.max_width }}; margin: 0 auto"></div>
     <script type="text/javascript">
       var disqus_shortname  = '{{ site.disqus_shortname }}';
       var disqus_identifier = '{{ page.id }}';
@@ -57,15 +57,5 @@ layout: default
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
   {%- endif %}
-
-  <!--
-    <script src="https://utteranc.es/client.js"
-        repo="iclr-blogposts/2023"
-        issue-term="pathname"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-</script>
-  -->
 
 </div>
