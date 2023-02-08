@@ -1,0 +1,129 @@
+---
+layout: distill
+title: Transformers Learn Faster by Taking Notes on the Fly
+description: If your unsupervised pre-training is taking forever and you need a lightweight solution that will accelerate it, taking notes might be the method you are looking for! This method takes notes of the contextual information of the rare words and incorporates this information as a part of their embeddings on the fly! The solution is lightweight in the sense that it does not increase the inference time and it does not require an additional pass during training. The experiments demonstrate that this method reduces the pre-training time of large language models by up to 60%.
+date: 2023-02-07
+htmlwidgets: true
+
+# Anonymize when submitting
+# authors:
+#   - name: Anonymous
+
+authors:
+  - name: Anonymous
+    url: "https://en.wikipedia.org/wiki/Albert_Einstein"
+    affiliations:
+      name: Anonymous
+  - name: Anonymous
+    url: "https://en.wikipedia.org/wiki/Boris_Podolsky"
+    affiliations:
+      name: Anonymous
+
+# must be the exact same name as your blogpost
+bibliography: 2023-02-07-taking_notes_on_the_fly.bib  
+
+# Add a table of contents to your post.
+#   - make sure that TOC names match the actual section names
+#     for hyperlinks within the post to work correctly.
+toc:
+  - name: Introduction
+  - name: Related Work
+    subsections:
+    - name: Transformers
+    - name: The Other Thing
+  - name: Background
+  - name: Methodology
+  - name: Experiments
+  - name: Conclusion
+
+
+# Below is an example of injecting additional post-specific styles.
+# This is used in the 'Layouts' section of this post.
+# If you use this post as a template, delete this _styles block.
+_styles: >
+  .fake-img {
+    background: #bbb;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 12px;
+  }
+  .fake-img p {
+    font-family: monospace;
+    color: white;
+    text-align: left;
+    margin: 12px 0;
+    text-align: center;
+    font-size: 16px;
+  }
+---
+
+## Introduction
+
+Transformers, which were invented by Google in 2017 <d-cite key="vaswani2017attention"></d-cite>, have become the go-to architecture for various tasks in many domains, such as natural language processing and computer vision <d-cite key="dosovitskiy2020image" ></d-cite> <d-cite key="devlin2018bert" ></d-cite> <d-cite key="radford2018improving" ></d-cite> <d-cite key="brown2020language" ></d-cite>.   The success of transformers are mainly because they have two amazing properties: 
+
+1. They are phenomenal in grasping the context of words within the bodies of text that they belong to.
+
+2. They do not process the input sequences in order. Thus, their operations can easily be parallelized. 
+
+Equipped with these powerful features, transformers have excelled in unsupervised pre-training tasks, which is the driving force of several state-of-the-art models, such as BERT and GPT-3. In unsupervised pre-training, a large and diverse dataset is used to train the (baseline) model. If someone wishes to fine-tune the base model for a specific task, they can do so by training it with a relatively smaller, task-specific dataset. 
+
+{% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/unsupervised.png" class="img-fluid" %}
+<div class="caption">
+    During unsupervised pre-training, the model is trained on a large unlabeled dataset. Then, it becomes a powerful baseline model that can be fine-tuned to work with various tasks. 
+</div>
+Generalization can be achieved with a sufficiently large model that is trained on sufficiently diverse and large data <d-cite key="radford2019language"></d-cite> <d-cite key="tirumala2022memorization"></d-cite>. However, pre-training large models is very time-consuming and costly in terms of environmental impacts and monetary resources <d-cite key="strubell2019energy"></d-cite> <d-cite key="chen2021bert2bert"></d-cite>. Thus, reducing the pre-training time and cost for transformer-based models is an imminent concern for machine learning practitioners. One area that has room for improvement is how quickly the model learns the embeddings of the rare words. It has been shown by many works that the embeddings of those words are noisy and not optimized <d-cite key="bahdanau2017learning"></d-cite> <d-cite key="gong2018frage"></d-cite> <d-cite key="khassanov2019constrained"></d-cite> <d-cite key="schick2020s"></d-cite>. Furthermore, Wu et al. 2021 empirically observe that 20% of all sentences in the corpus contain a rare word and they propose a <em>"note-taking"</em> approach improves model’s ability to learn the embeddings of rare words <d-cite key="wu2021taking"></d-cite> . Impressively, they reduce the pre-training time of well-known large language models (LLMs), such as BERT, by 60%. During this post, we will dive deep into how this method works!
+
+## Related Work
+
+### Transformers
+
+### The Other Thing
+
+## Background 
+
+
+
+## Methodology
+
+Because learning the embeddings of rare words is arduous, it takes a lot of training epochs for the model to make up for the resulting loss in quality. Thus, the authors propose keeping a third type of embedding (besides the word embeddings and positional embeddings), which is designed to retain additional information about the rare words. This embedding type can be considered as <em>taking notes</em> on the contextual information of these rare words as the training progresses, is also called the note dictionary, and is updated as the training progresses.
+
+
+At this point, we assume that the text has already been pre-processed using Byte Pair Encoding (BPE<d-footnote>A very nice <a href="https://towardsdatascience.com/byte-pair-encoding-the-dark-horse-of-modern-nlp-eb36c7df4f10"> blog post</a> about BPE.</d-footnote>), which is a popular method that is used as a part of the text embedding process for NLP tasks <d-cite key="sennrich2015neural"></d-cite>. In BPE, each word is represented as a concatenation of sub-word units, which are selected according to how much each they unit occur in the given text. For example, if the sub-word <b>"pre"</b> occurs in the text frequently, it will be represented with a single character, such as <b>"X"</b> in this encoding. This way, the textual data is compressed and manageable. Also, because each sub-word unit gets their own embedding, we get a hybrid approach between word-level and character-level embeddings. Therefore, the embedding of each word might very well be made up of multiple consecutive tokens. With this information in mind, let us walk through the steps of note taking!
+
+The first three steps are about initializing the required variables and determining the hyper-parameters of the scheme.
+
+0a. Randomly initialize the note dictionary, $$NoteDict$$.
+
+0b. Determine a window size (2*k as denoted in the paper), which corresponds to the number of surrounding tokens whose embedding will be included in the note.
+
+0c. Determine a discount factor, $$\gamma\in (0,1)$$. This will determine 
+how much weight we give to each occurrence of the rare word and the corresponding contextual information.
+
+Now, note taking begins!
+
+1.For each word $$w$$ in the training corpora, check if the word is a rare word or not. If it is rare, mark the index of the starting and ending sub-word tokens of the word with $$s$$ and $$t$$, respectively.
+
+2.Compute the output of the transformer encoder on the input embeddings. The resulting embeddings will be composed of $$d$$-dimensional vector per token. Call the output of the transformer
+encoder on position $$j$$, $$c_j\in \mathbb{R}^d$$.
+
+3.Given a sequence of tokens $$x$$ with word $$w$$ in it, sum the $$d$$-dimensional input embedding vectors of all tokens located between indices $$s-k$$ and $$t+k$$ and divide this sum by $$2k+t-s$$, namely, the number of tokens within that interval. The resulting vector is the note of $$w$$ taken for sequence $$x$$, $$Note(w,x)$$. Mathematically, we have
+$$Note(w,x)=\dfrac{1}{2k+t-s}\sum_{j=s-k}^{t+k}c_j$$.
+
+{% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/numberline.png" class="img-fluid" %}
+<div class="caption">
+    This figure demonstrates contextual embedding vectors at which locations will be selected and summed with an example. This line represents the indices of a sequence of length 11. Let us assume that the rare word is contained within tokens 5 and 6 and k=2, which makes the window size 2k=4. Thus, we sum the tokens at location 5, 6, as well as 3, 4, (which are the two immediate left tokens) and 7,8 (which are the two immediate right tokens). Finally, we divide the each element of the resulting vector by 6, which is the total number of elements in the interval.
+</div>
+
+4.To update the note embedding of w, NoteDict(w), take the exponential moving average of its previous value and Note(w,x) using the discount factor, namely, 
+$$NoteDict(w)=(1-\gamma)NoteDict(w)+\gamma Note(w,x)$$. This way, we can choose how much importance we assign to each occurrence of a rare word.
+
+Now that we have our notes neatly stored in $$NoteDict$$, let us incorporate them into the training process! We again take the exponential moving average of the sum of the positional and token embeddings (the embedding used in the original transformer paper) with the corresponding $$NoteDict$$ value using another parameter called $$\lambda\in(0,1)$$. In particular, for every word $$w$$ that occurs in both $$NoteDict$$ and sequence $$x$$, each location corresponding to the word $$w$$ and its surrounding $$2k$$ tokens is set to the weighted of the sum of the positional and token embeddings with the corresponding NoteDict value. Any other location is set to the sum of the token embeddings and positional embeddings only.
+
+## Experiments
+
+Just wrap the text you would like to show up in a footnote in a `<d-footnote>` tag.
+The number of the footnote will be automatically generated.
+
+## Conclusion
+
+
