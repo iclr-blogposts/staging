@@ -81,6 +81,15 @@ Generalization can be achieved with a sufficiently large model that is trained o
 
 ## Background 
 
+Pretraining of LLMs has become a burden in terms of training time and power consumption. Still, it is essential for almost every downstream task in NLP applications. This computational cost is addressed by several studies in terms of altering the model or utilizing the weight distribution of neural networks' layers. Particularly, <d-cite key="clark2020electra"></d-cite> added a discriminator to predict if each word in the sentence that is completed by the generatoris correct or not. Another important work arised after the observation that the attention distributions of top and bottom layers are quite similar. <d-cite key="gong2019efficient"></d-cite> proposed an iterative algorithm that doubles the number of layers after each training episode. 
+
+The efficiency of pretraining LLMs has shown to be incresed, still the heavy-tailed distribution of words in natual language corpora is an obstacle in further development <d-cite key="strubell2019energy"></d-cite>. It is shown that the frequency of words affect the embeddings. Because of the sparse and inaccurate optimization of neural networks, rare words are much likely to generate noisy embeddings <d-cite key="gao2019representation"></d-cite>. Additionally, most of the rare words' embeddings are close to each other in embedding space indepent from its semantic information while the neighbors of frequent words are the ones that have similar meaning <d-cite key="gong2018frage"></d-cite>. 
+Initial approaches mainly depended on prior information (CITE ve biraz daha bilgi ver!!!)
+Recently, this problem is also adressed by using adverserial training where a discriminator classifies each word as 'frequent' or 'rare' allowing semantic information to be encoded  <d-cite key="gong2018frage"></d-cite>.
+
+
+(BIR SORU : SUNU EKLEYEYIM MI? -> There are studies that use a memory buffer during inference. Memory is a part of the model to increase performance. → For question-answering tasks (CITE) and as an alternative way for domain adaptation.)
+
 
 
 ## Methodology
