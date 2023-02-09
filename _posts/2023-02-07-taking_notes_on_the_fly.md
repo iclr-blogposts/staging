@@ -58,6 +58,10 @@ _styles: >
 ---
 
 ## Introduction
+{% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/example.png" class="img-fluid" %}
+<div class="caption">
+   Figure 1 from the paper, which describes an example situation in which taking notes could be useful. Here COVID is a rare word. Therefore, the model is struggling with the completion task on the left because it has not possibly seen many sentences with the word COVID in it. Thus, we take notes of the contextual information of it as we see examples on it in the training set and we quickly learn to associate it with which words! 
+</div>
 
 Transformers, which were invented by Google in 2017 <d-cite key="vaswani2017attention"></d-cite>, have become the go-to architecture for various tasks in many domains, such as natural language processing and computer vision <d-cite key="dosovitskiy2020image" ></d-cite> <d-cite key="devlin2018bert" ></d-cite> <d-cite key="radford2018improving" ></d-cite> <d-cite key="brown2020language" ></d-cite>.   The success of transformers are mainly because they have two amazing properties: 
 
@@ -128,7 +132,7 @@ $$Note(w,x)=\dfrac{1}{2k+t-s}\sum_{j=s-k}^{t+k}c_j$$.
 
 {% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/numberline.png" class="img-fluid" %}
 <div class="caption">
-    This figure demonstrates contextual embedding vectors at which locations will be selected and summed with an example. This line represents the indices of a sequence of length 11. Let us assume that the rare word is contained within tokens 5 and 6 and k=2, which makes the window size 2k=4. Thus, we sum the tokens at location 5, 6, as well as 3, 4, (which are the two immediate left tokens) and 7,8 (which are the two immediate right tokens). Finally, we divide the each element of the resulting vector by 6, which is the total number of elements in the interval.
+    This figure demonstrates contextual embedding vectors at which locations will be selected and summed with an example. This line represents the indices of a sequence of length 11. Let us assume that the rare word is contained within tokens 4 to 6, and k=2, which makes the window size 2k=4. Thus, we sum the tokens at location 4, 5, 6, as well as 3, 4, (which are the two immediate left tokens) and 7,8 (which are the two immediate right tokens). Finally, we divide the each element of the resulting vector by 6, which is the total number of elements in the interval.
 </div>
 
 4.To update the note embedding of w, NoteDict(w), take the exponential moving average of its previous value and Note(w,x) using the discount factor, namely, 
@@ -136,10 +140,13 @@ $$NoteDict(w)=(1-\gamma)NoteDict(w)+\gamma Note(w,x)$$. This way, we can choose 
 
 Now that we have our notes neatly stored in $$NoteDict$$, let us incorporate them into the training process! We again take the exponential moving average of the sum of the positional and token embeddings (the embedding used in the original transformer paper) with the corresponding $$NoteDict$$ value using another parameter called $$\lambda\in(0,1)$$. In particular, for every word $$w$$ that occurs in both $$NoteDict$$ and sequence $$x$$, each location corresponding to the word $$w$$ and its surrounding $$2k$$ tokens is set to the weighted of the sum of the positional and token embeddings with the corresponding NoteDict value. Any other location is set to the sum of the token embeddings and positional embeddings only.
 
-## Experiments
+## Results
+{% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/graphs.png" class="img-fluid" %}
+<div class="caption">
+    Figure 3. from the paper, presenting the loss and GLUE scores of the models with and without taking notes, over many iterations.
+</div>
+The experiments are conducted on BERT and ELECTRA models. The loss values of the pre-training runs with <em>note taking</em> descrease significantly faster than vanilla pre-training. Moreover, the models trained while taking notes achieve higher GLUE <d-cite key="wang2018glue"></d-cite> scores much faster. Additionally, they report that after one million iterations, the GLUE score of the models pre-trained with notes are superior to their counterparts trained without notes. Finally, they report that when it took one model with note taking to reach a certain GLUE score around 100.000 training iterations, it took the model around 400.000 training iterations to reach that same score without notes. That is a 60% improvement in training time to reach the same performance! 
 
-Just wrap the text you would like to show up in a footnote in a `<d-footnote>` tag.
-The number of the footnote will be automatically generated.
 
 ## Conclusion
 
