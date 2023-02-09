@@ -138,8 +138,14 @@ $$Note(w,x)=\dfrac{1}{2k+t-s}\sum_{j=s-k}^{t+k}c_j$$.
 4.To update the note embedding of w, NoteDict(w), take the exponential moving average of its previous value and Note(w,x) using the discount factor, namely, 
 $$NoteDict(w)=(1-\gamma)NoteDict(w)+\gamma Note(w,x)$$. This way, we can choose how much importance we assign to each occurrence of a rare word.
 
-Now that we have our notes neatly stored in $$NoteDict$$, let us incorporate them into the training process! We again take the exponential moving average of the sum of the positional and token embeddings (the embedding used in the original transformer paper) with the corresponding $$NoteDict$$ value using another parameter called $$\lambda\in(0,1)$$. In particular, for every word $$w$$ that occurs in both $$NoteDict$$ and sequence $$x$$, each location corresponding to the word $$w$$ and its surrounding $$2k$$ tokens is set to the weighted of the sum of the positional and token embeddings with the corresponding NoteDict value. Any other location is set to the sum of the token embeddings and positional embeddings only.
-
+Now that we have our notes neatly stored in $$NoteDict$$, let us incorporate them into the training process! We again take the exponential moving average of the sum of the positional and token embeddings (the embedding used in the original transformer paper) with the corresponding $$NoteDict$$ value using another parameter called $$\lambda\in(0,1)$$. In particular, for every word $$w$$ that occurs in both $$NoteDict$$ and sequence $$x$$, each location corresponding to the word $$w$$ and its surrounding $$2k$$ tokens is set to the weighted of the sum of the positional and token embeddings with the corresponding NoteDict value. Any other location is set to the sum of the token embeddings and positional embeddings only. The resulting vector will be the input to our model! Mathematically, for location $$i\in[d]$$, which corresponds to (one of the) tokens of word $$w$$ in the sequence, we have 
+$$
+\text{input}_i= \begin{cases} 
+      (1-\lambda)(\text{p_embed}_i+\text{t_embed}_i)+\lambda\text{NoteDict}(w), & \text{w is a rare word}  \\
+      \text{p_embed}_i+\text{t_embed}_i, &\text{otherwise} \\
+   \end{cases}
+$$
+where $$\text{p_embed}$$ is positional embeddings, $$\text{t_embed}$$ is token embeddings and $$\lambda$$ (set to 0.5) is the hyperparameter specifying the weight of the notes when computing the embeddings.
 ## Results
 {% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/graphs.png" class="img-fluid" %}
 <div class="caption">
