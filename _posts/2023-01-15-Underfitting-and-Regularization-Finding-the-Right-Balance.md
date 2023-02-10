@@ -113,7 +113,8 @@ Knowledge distillation in learned models is constituted of:
 
 We specifically aim at training the teacher and student model in a online setting, in this online type of distillation training method both the teacher and the student model are trained together simultaneously.
 
-{% include figure.html path="assets\img\2023-01-15-Underfitting-and-Regularization-Finding-the-Right-Balance\rkd.png" class="img-fluid" %}
+{% include figure.html 
+path="assets/img/2023-01-15-Underfitting-and-Regularization-Finding-the-Right-Balance/rkd.png" class="img-fluid" %}
 
 **Relational Knowledge distillation can be expressed as** -  
  Given a teacher model $$\:T\:$$ and a student model $$S$$, we denote $$f_T(\cdot)$$ and $$f_S(\cdot)$$ as the functions of the teacher and the student, respectively, and $$\psi$$ as a function extracting the relation, we have
@@ -131,7 +132,7 @@ where $$\mathcal{L}_{\text{RKD}}$$ is the loss function, $$t_i = f_T(x_i)$$ and 
 1. **Distance-wise distillation loss (pair)**
 
 <div class="small_img row mt-1">
-{% include figure.html path="assets\img\2023-01-15-Underfitting-and-Regularization-Finding-the-Right-Balance\RKD-D.png" class="img-fluid" %}  
+{% include figure.html path="assets/img/2023-01-15-Underfitting-and-Regularization-Finding-the-Right-Balance/RKD-D.png" class="img-fluid" %}  
 </div>
 
 This method is known as RKD-D. It transfers relative distance between points on embedding space. Mathematically,
@@ -151,7 +152,7 @@ $$
   2. **Angle-wise distillation loss (triplet)**
 
   <div class="small_img row mt-1">
-      {% include figure.html path="assets\img\2023-01-15-Underfitting-and-Regularization-Finding-the-Right-Balance\RKD-A.png" class="img-fluid" %}  
+      {% include figure.html path="assets/img/2023-01-15-Underfitting-and-Regularization-Finding-the-Right-Balance/RKD-A.png" class="img-fluid" %}  
   </div>
 
 This method is known as RKD-A. RKD-A transfers angle formed by three points on embedding space. Mathematically,
@@ -214,7 +215,7 @@ $$\begin{equation}\tilde{g}_i = \frac{\partial \mathcal{L}}{\partial \tilde{w}_i
 
 where $$g_i$$ denotes the gradients of $$w_i$$ and $$\mathcal{L}$$ denotes the loss function.
 
-{% include figure.html path="assets\img\2023-01-15-Underfitting-and-Regularization-Finding-the-Right-Balance\NetAug_SWE.png" class="img-fluid" %}
+{% include figure.html path="assets/img/2023-01-15-Underfitting-and-Regularization-Finding-the-Right-Balance/NetAug_SWE.png" class="img-fluid" %}
 
 ## Generating largest augmented model via Single Path One-Shot NAS
 
