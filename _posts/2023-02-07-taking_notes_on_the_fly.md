@@ -78,25 +78,26 @@ Equipped with these powerful features, transformers have excelled in unsupervise
 Generalization can be achieved with a sufficiently large model that is trained on sufficiently diverse and large data <d-cite key="radford2019language"></d-cite> <d-cite key="tirumala2022memorization"></d-cite>. However, pre-training large models is very time-consuming and costly in terms of environmental impacts and monetary resources <d-cite key="strubell2019energy"></d-cite> <d-cite key="chen2021bert2bert"></d-cite>. Thus, reducing the pre-training time and cost for transformer-based models is an imminent concern for machine learning practitioners. One area that has room for improvement is how quickly the model learns the embeddings of the rare words. It has been shown by many works that the embeddings of those words are noisy and not optimized <d-cite key="bahdanau2017learning"></d-cite> <d-cite key="gong2018frage"></d-cite> <d-cite key="khassanov2019constrained"></d-cite> <d-cite key="schick2020s"></d-cite>. Furthermore, Wu et al. 2021 empirically observe that 20% of all sentences in the corpus contain a rare word and they propose a <em>"note-taking"</em> approach improves model’s ability to learn the embeddings of rare words <d-cite key="wu2021taking"></d-cite> . Impressively, they reduce the pre-training time of well-known large language models (LLMs), such as BERT, by 60%. During this post, we will dive deep into how this method works!
 
 ## Related Work
+### Transformers
 
-
-<d-cite key="wu2021taking"></d-cite> extends the BERT model <d-cite key="devlin2018bert"></d-cite> with an external memory. BERT is composed of multiple transformer encoder layers. Each encoder layer is formed of a multi-head attention layer and a feed-forward layer.   
-The initial input to the multi-head attention layer is the sum of word embeddings and positional embeddings. After mapping each token in the sentence to a vector, we need to provide an information about the position of the token in the sentence. This is provided by the "positional embedding" (PE) vector composed of pairs of sines and cosines.
+<d-cite key="wu2021taking"></d-cite> extends the BERT model <d-cite key="devlin2018bert"></d-cite> with an external memory. BERT is composed of a set of transformer layers  is formed of a multi-head attention layer and a feed-forward layer.   
+The initial input to the multi-head attention layer is the sum of word embeddings and positional embeddings. Each one-hot encoded token is multiplied with a weight matrix in order to obtain a real-valued non-sparse representation. The weight matrix is learned throughout the training. After mapping each token in the sentence to a vector, we need to provide an information about the position of the token in the sentence. This is provided by the "positional embedding" (PE) vector composed of sine and cosine pairs.
 
 $$PE_{pos,2i} = sin(pos / 10000^{2i/d_{embed}} )$$
 $$PE_{pos,2i+1} = cos(pos / 10000^{2i/d_{embed}} )$$
 
-where pos is the position of the token in the sentence, $$d_embed$$ is the embedding dimension of the model, and $$i$$ is refers to the dimension in the PE vector. 
+where pos is the position of the token in the sentence, $d_{embed}$ is the embedding dimension of the model, and $i$ is refers to the dimension in the $PE$ vector. 
 
-### The Other Thing
+### Word Distribution in Texts
 
-The distribution of the words in a natural language corpora follow Zipf's law <d-cite key="zipf1932selected"></d-cite>, that is, the frequency $$n^{th}$$ most frequent word is proportiional to $$1/n^\alpha, \: where \:\: \alpha \sim 1$$. 
+The distribution of the words in a natural language corpora follow Zipf's law <d-cite key="zipf1932selected"></d-cite>, that is, the frequency $n^{th}$ most frequent word is proportiional to $1/n^\alpha, \: where \:\: \alpha \sim 1$. 
 
 {% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/zipf_law.png" class="img-fluid" %}
 <div class="caption">
   IMPORTANT: License??? 
 </div>
 In other words, number of popular words are much less than of rare words, yet their frequency is much larger. This harms pretraining of LLMs because of the sparse and inaccurate optimization of neural networks, rare words are much likely to generate noisy and low-quality embeddings <d-cite key="gao2019representation"></d-cite>. 
+
 
 ## Background 
 
@@ -108,9 +109,6 @@ Note taking approach positively impacts learning performance in humans <d-cite k
 It is shown that the frequency of words affect the embeddings. Additionally, most of the rare words' embeddings are close to each other in embedding space indepent from its semantic information while the neighbors of frequent words are the ones that have similar meaning <d-cite key="gong2018frage"></d-cite>. 
 Initial approaches mainly depended on prior information (CITE ve biraz daha bilgi ver!!!)
 Recently, this problem is also adressed by using adverserial training where a discriminator classifies each word as 'frequent' or 'rare' allowing semantic information to be encoded  <d-cite key="gong2018frage"></d-cite>.
-
-
-(BIR SORU : SUNU EKLEYEYIM MI? -> There are studies that use a memory buffer during inference. Memory is a part of the model to increase performance. → For question-answering tasks (CITE) and as an alternative way for domain adaptation.)
 
 ## Methodology
 
