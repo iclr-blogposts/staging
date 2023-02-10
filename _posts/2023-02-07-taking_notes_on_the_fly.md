@@ -88,15 +88,20 @@ $$PE_{pos,2i+1} = cos(pos / 10000^{2i/d_{embed}} )$$
 
 where pos is the position of the token in the sentence, $d_{embed}$ is the embedding dimension of the model, and $i$ is refers to the dimension in the $PE$ vector. 
 
+
+
+
 ### Word Distribution in Texts
 
 The distribution of the words in a natural language corpora follow Zipf's law <d-cite key="zipf1932selected"></d-cite>, that is, the frequency $n^{th}$ most frequent word is proportiional to $1/n^\alpha, \: where \:\: \alpha \sim 1$. 
 
 {% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/zipf_law.png" class="img-fluid" %}
 <div class="caption">
-  IMPORTANT: License??? 
+The frequencies of 50 most common words in Brown Corpus <d-cite key="francis79browncorpus"></d-cite>
+</div>. Green is the word counts estimated by Zipf's law, blue is the actual count. Image is taken from <d-cite key="zipf"></d-cite>.
 </div>
 In other words, number of popular words are much less than of rare words, yet their frequency is much larger. This harms pretraining of LLMs because of the sparse and inaccurate optimization of neural networks, rare words are much likely to generate noisy and low-quality embeddings <d-cite key="gao2019representation"></d-cite>. 
+
 
 
 ## Background 
@@ -106,8 +111,7 @@ Pretraining of LLMs has become a burden in terms of training time and power cons
 The efficiency of pretraining LLMs has shown to be incresed, still the heavy-tailed distribution of words in natual language corpora is an obstacle in further development <d-cite key="strubell2019energy"></d-cite>. 
 Note taking approach positively impacts learning performance in humans <d-cite key="makany2009optimising"></d-cite>. This idea is inspired studies in terms of contributing to training efficiency <d-cite key="wu2021taking"></d-cite>  and increasing performance in downstream tasks <d-cite key="feng2022memory"></d-cite>, <d-cite key="fevry2020entities"></d-cite>, <d-cite key="guu2020retrieval"></d-cite>, <d-cite key="khandelwal2019generalization"></d-cite>. 
 
-It is shown that the frequency of words affect the embeddings. Additionally, most of the rare words' embeddings are close to each other in embedding space indepent from its semantic information while the neighbors of frequent words are the ones that have similar meaning <d-cite key="gong2018frage"></d-cite>. 
-Initial approaches mainly depended on prior information (CITE ve biraz daha bilgi ver!!!)
+It is shown that the frequency of words affect the embeddings. Additionally, most of the rare words' embeddings are close to each other in embedding space indepent from its semantic information while the neighbors of frequent words are the ones that have similar meaning <d-cite key="gong2018frage"></d-cite>. Initial studies mainly used subword information to encode semantic information, this approach is shown to be valuable for morphologically rich languages <d-cite key="pmlr-v32-santos14"></d-cite>, <d-cite key="kim2016character"></d-cite>, <d-cite key="el2019parsimonious"></d-cite>. 
 Recently, this problem is also adressed by using adverserial training where a discriminator classifies each word as 'frequent' or 'rare' allowing semantic information to be encoded  <d-cite key="gong2018frage"></d-cite>.
 
 ## Methodology
