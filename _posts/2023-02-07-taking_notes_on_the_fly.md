@@ -80,16 +80,20 @@ Generalization can be achieved with a sufficiently large model that is trained o
 ## Related Work
 ### Transformers
 
-<d-cite key="wu2021taking"></d-cite> extends the BERT model <d-cite key="devlin2018bert"></d-cite> with an external memory. BERT is composed of a set of transformer layers  is formed of a multi-head attention layer and a feed-forward layer.   
-The initial input to the multi-head attention layer is the sum of word embeddings and positional embeddings. Each one-hot encoded token is multiplied with a weight matrix in order to obtain a real-valued non-sparse representation. The weight matrix is learned throughout the training. After mapping each token in the sentence to a vector, we need to provide an information about the position of the token in the sentence. This is provided by the "positional embedding" (PE) vector composed of sine and cosine pairs.
+<d-cite key="wu2021taking"></d-cite> extends the BERT model <d-cite key="devlin2018bert"></d-cite> with an external memory. BERT's architecture is based on the 
+original transformer model <d-cite key="vaswani2017attention"></d-cite>. Transformer is composed of alternating multi-head attention and feed-forward layers. The initial input to the multi-head attention layer is the sum of word embeddings and positional embeddings. Each one-hot encoded token is multiplied with a weight matrix in order to obtain a real-valued non-sparse representation. The weight matrix is learned throughout the training. After mapping each token in the sentence to a vector, we need to provide an information about the position of the token in the sentence. This is provided by the "positional embedding" (PE) vector composed of sine and cosine pairs.
 
 $$PE_{pos,2i} = sin(pos / 10000^{2i/d_{embed}} )$$
 $$PE_{pos,2i+1} = cos(pos / 10000^{2i/d_{embed}} )$$
 
 where pos is the position of the token in the sentence, $d_{embed}$ is the embedding dimension of the model, and $i$ is refers to the dimension in the $PE$ vector. 
 
+Self attention mechanism allows the model to relate words in a sentence through a set of learnable query (Q), key (K) and value (V) vectors. The output of the attention function calculates a compatibility score for each pair of words in the sentence.
 
+$$ attention (Q,K,V) = softmax(QK^T / sqrt(d_k))$$ where $$d_k$$ is the dimension of hidden representations. 
+In order to improve the representational power of the model, <d-cite key="vaswani2017attention"></d-cite> proposed a multi-head attention mechanism, that is, self-attention function is calculated several times independently, results are concatenated, and linearly projected into the desired dimension. 
 
+BERT is a masked language model which uses the transformer architecture. During training time, 15% of the words in the sentence are masked or replaced with a random word. The model learns to predict the words that are masked.
 
 ### Word Distribution in Texts
 
