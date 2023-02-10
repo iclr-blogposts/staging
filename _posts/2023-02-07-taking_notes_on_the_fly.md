@@ -79,16 +79,24 @@ Generalization can be achieved with a sufficiently large model that is trained o
 
 ## Related Work
 
-### Transformers
+
+<d-cite key="wu2021taking"></d-cite> extends the BERT model <d-cite key="devlin2018bert"></d-cite> with an external memory. BERT is composed of multiple transformer encoder layers. Each encoder layer is formed of a multi-head attention layer and a feed-forward layer.   
+The initial input to the multi-head attention layer is the sum of word embeddings and positional embeddings. After mapping each token in the sentence to a vector, we need to provide an information about the position of the token in the sentence. This is provided by the "positional embedding" (PE) vector composed of pairs of sines and cosines.
+
+$$PE_{pos,2i} = sin(pos / 10000^{2i/d_{embed}} )$$
+$$PE_{pos,2i+1} = cos(pos / 10000^{2i/d_{embed}} )$$
+
+where pos is the position of the token in the sentence, $$d_embed$$ is the embedding dimension of the model, and $$i$$ is refers to the dimension in the PE vector. 
+
 ### The Other Thing
 
-The distribution of the words in a natural language corpora follow Zipf's law, that is, the frequency $$n^{th}$$ most frequent word is proportiional to $$1/n^\alpha, \: where \:\: \alpha \sim 1$$. 
+The distribution of the words in a natural language corpora follow Zipf's law <d-cite key="zipf1932selected"></d-cite>, that is, the frequency $$n^{th}$$ most frequent word is proportiional to $$1/n^\alpha, \: where \:\: \alpha \sim 1$$. 
 
-(RESIM KOY!!!)
-
-In other words, number of popular words are much less than of rare words, yet their frequency is much larger. This harms pretraining of LLMs because of the sparse and inaccurate optimization of neural networks, rare words are much likely to generate noisy and low-quality embeddings <d-cite key="gao2019representation"></d-cite>.
-
-
+{% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/zipf_law.png" class="img-fluid" %}
+<div class="caption">
+  IMPORTANT: License??? 
+</div>
+In other words, number of popular words are much less than of rare words, yet their frequency is much larger. This harms pretraining of LLMs because of the sparse and inaccurate optimization of neural networks, rare words are much likely to generate noisy and low-quality embeddings <d-cite key="gao2019representation"></d-cite>. 
 
 ## Background 
 
