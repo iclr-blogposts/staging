@@ -155,5 +155,5 @@ The experiments are conducted on BERT and ELECTRA models. The loss values of the
 
 
 ## Conclusion
-
+Ever-increasing data sizes, enlarging models, and hardware resources are some of the major factors in the current success of LLMs. However, this also means immense power consumption and carbon emission. Knowing that pretraining of LLMs is the most computationally intensive phase of a natural language task, efficient pretraining is the concern of this paper. Knowing that the heavy-tailed distribution of word frequencies in any natural language corpora may hinder the efficiency of pretraining, better utilizing the data is important. They propose a memory extension to the transformer architecture: "Taking Notes on the Fly" (TNF). TNF holds a dictionary where each key is a rare word. The values are the historical contextual information which is updated at each time the corresponding word is encountered. The dictionary is removed from the model during the inference phase. TNF reduces the training time by 60% without any reduction in the performance.
 
