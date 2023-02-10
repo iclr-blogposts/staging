@@ -97,7 +97,7 @@ BERT is a masked language model which uses the transformer architecture. During 
 
 ### Word Distribution in Texts
 
-The distribution of the words in a natural language corpora follow Zipf's law <d-cite key="zipf1932selected"></d-cite>, that is, the frequency $n^{th}$ most frequent word is proportiional to $1/n^\alpha, \: where \:\: \alpha \sim 1$. 
+The distribution of the words in a natural language corpora follow Zipf's law <d-cite key="zipf1932selected"></d-cite>, that is, the frequency $$n^{th}$$ most frequent word is proportiional to $$1/n^\alpha, \: where \:\: \alpha \sim 1$$. 
 
 {% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/zipf_law.png" class="img-fluid" %}
 <div class="caption">
