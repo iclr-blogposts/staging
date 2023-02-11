@@ -101,8 +101,7 @@ The distribution of the words in a natural language corpora follow Zipf's law <d
 
 {% include figure.html path="assets/img/2023-02-07-taking_notes_on_the_fly/zipf_law.png" class="img-fluid" %}
 <div class="caption">
-The frequencies of 50 most common words in Brown Corpus <d-cite key="francis79browncorpus"></d-cite>
-</div>. Green is the word counts estimated by Zipf's law, blue is the actual count. Image is taken from <d-cite key="zipf"></d-cite>.
+The frequencies of 50 most common words in [Brown Corpus](http://korpus.uib.no/icame/manuals/BROWN/INDEX.HTM). Green is the word counts estimated by Zipf's law, blue is the actual count. Image is taken from <d-cite key="zipf"></d-cite>.
 </div>
 In other words, number of popular words are much less than of rare words, yet their frequency is much larger. This harms pretraining of LLMs because of the sparse and inaccurate optimization of neural networks, rare words are much likely to generate noisy and low-quality embeddings <d-cite key="gao2019representation"></d-cite>. 
 
