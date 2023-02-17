@@ -21,7 +21,7 @@ bibliography: 2022-12-01-diffusion-is-all-you-need.bib
 toc:
   - name: Introduction
   - name: Motivation
-  - name: Formulating the conformation prediction problem
+  - name: Formulating the conformation generation problem
       subsections:
     - name: Roto-translation equivariance
   - name: Decomposing GeoDiff
@@ -52,12 +52,19 @@ When studying molecules it is important to understand them as three-dimensional 
 Therefore, we are only interested in conformations that fall in stable low-energy minima, as these low-energy conformations are the ones that the molecule will most likely adopt under natural conditions and play a crucial role in determining the molecule’s behaviour and properties. By identifying and characterizing the low-energy conformations, researchers gain insights into their stability, reactivity and interactions with other molecules.
 
 
-## Formulating the conformation prediction problem
-We can formulate the problem of conformation prediction as a conditional generative problem where we aim to generate stable conformations $C$  from a molecule’s graph $G$.  For each $G$ given its conformations $C$ as i.i.d samples from an underlying Boltzmann distribution <d-cite key="noe2019boltzmann"></d-cite>, our goal is to learn a generative model $p_θ(C|G)$ to draw possible conformations from.
+## Formulating the conformation generation problem
+
+{% include figure.html path="assets/img/formulation.jpg" class="img-fluid" %}
+A formulation of the conformation generation problem, adapted from <d-cite key="xu2022geodiff"></d-cite>
+
+We can formulate the problem of conformation generation as a conditional generative problem where we aim to generate stable conformations $C$  from a molecule’s graph $G$.  For each $G$ given its conformations $C$ as i.i.d samples from an underlying Boltzmann distribution <d-cite key="noe2019boltzmann"></d-cite>, our goal is to learn a generative model $p_θ(C|G)$ to draw possible conformations from.
 
 
 
 ### Roto-translation equivariance
+
+{% include figure.html path="assets/img/roto-trans.png" class="img-fluid" %}
+A visualisation of roto-translation equivariance, adapted from <d-cite key="xu2022geodiff"></d-cite>
  
 To generate stable molecular conformations, we need an algorithm that preserves roto-translation equivariance of the conformations that previous work has not focused on. To explain this property, let us delve into what equivariance is.  A representation $φ$ is equivariant with a transformation $g$ of the input if the transformation can be transferred to the representation output. Invariance is a special case of equivariance obtained when the transformation is the identity map <d-cite key="lenc2015understanding"></d-cite>.
 
@@ -67,7 +74,9 @@ In the context of molecular conformations, we have to achieve the special case o
 
 ## Decomposing GeoDiff
 
-<GeoDiff image></GeoDiff>
+{% include figure.html path="assets/img/geodiff_main.jpg/sketch_robust_region.png" class="img-fluid" %}
+The diffusion model of GeoDiff, adapted from <d-cite key="xu2022geodiff"></d-cite>
+
 
  **Legend**:
 - $C^{0}$ denotes the ground truth conformations
@@ -205,7 +214,7 @@ Now, we can generate stable molecular conformations via sampling. Given a graph 
 
 
 ## But why generative models?
-The purpose of predicting molecular conformations is to enable human experts to analyse the properties of the molecules and understand how these properties affect the viability of a molecule as a drug candidate. Therefore, it is important that the molecular conformations generated are diverse to capture the different possible conformations that could occur in nature but the conformations generated should not deviate significantly such that the analysis is affected. To set a threshold for the different possible conformations, the standard metric used has been selecting conformations that are within a certain root-mean-square deviation (RMSD), say a few ångströms, of the true structure.
+The purpose of prediciting molecular conformations is to enable human experts to analyse the properties of the molecules and understand how these properties affect the viability of a molecule as a drug candidate. Therefore, it is important that the molecular conformations generated are diverse to capture the different possible conformations that could occur in nature but the conformations generated should not deviate significantly such that the analysis is affected. To set a threshold for the different possible conformations, the standard metric used has been selecting conformations that are within a certain root-mean-square deviation (RMSD), say a few ångströms, of the true structure.
 
 However, the objective of maximizing the proportion of predictions with RMSD within some tolerance $\epsilon$ is not differentiable and thus, cannot be used for training with stochastic gradient descent. Instead, maximizing the expected proportion of predictions with RMSD < $\epsilon$ corresponds to maximizing the likelihood of the true structure under the model’s output distribution, in the limit as $\epsilon$ goes to 0. This concept inspires the development of a generative model, whose objective is to minimize an upper bound on the negative log-likelihood of observed molecular structures under the distribution of the model. As a result, the problem of molecular docking is treated as a task of learning a distribution over possible positions of a ligand molecule conditioned on the protein structure and a diffusion generative model is developed to represent this space. Therefore, this observation has motivated several works on the use of generative models for molecular conformation generation, such as GeoDiff.
 
