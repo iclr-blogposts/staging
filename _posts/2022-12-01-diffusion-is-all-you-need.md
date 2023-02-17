@@ -19,22 +19,22 @@ bibliography: 2022-12-01-diffusion-is-all-you-need.bib
 #   - make sure that TOC names match the actual section names
 #     for hyperlinks within the post to work correctly.
 toc:
-  - name: Introduction
-  - name: Motivation
-  - name: Formulating the conformation prediction problem
+  - name: [Introduction]
+  - name: [Motivation]
+  - name: [Formulating the conformation prediction problem]
       subsections:
-    - name: Roto-translation equivariance
-  - name: Decomposing GeoDiff
+    - name: [Roto-translation equivariance]
+  - name: [Decomposing GeoDiff]
       subsections:
-    - name: A primer on Diffusion Models
-    - name: Forward process
-    - name: Reverse process
-    - name: Making the reverse process roto-translation equivariant
-    - name: Improved Training Objective
-    - name: Sampling
+    - name: [A primer on Diffusion Models]
+    - name: [Forward process]
+    - name: [Reverse process]
+    - name: [Making the reverse process roto-translation equivariant]
+    - name: [Improved Training Objective]
+    - name: [Sampling]
 
-  - name: But why generative models?
-  - name: Future work
+  - name: [But why generative models?]
+  - name: [Future work]
 
 
 
