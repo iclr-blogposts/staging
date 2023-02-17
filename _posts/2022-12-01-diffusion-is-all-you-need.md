@@ -57,7 +57,7 @@ Therefore, we are only interested in conformations that fall in stable low-energ
 {% include figure.html path="assets/img/formulation.jpg" class="img-fluid" %}
 A formulation of the conformation generation problem, adapted from <d-cite key="xu2022geodiff"></d-cite>
 
-We can formulate the problem of conformation generation as a conditional generative problem where we aim to generate stable conformations $C$  from a molecule’s graph $G$.  For each $G$ given its conformations $C$ as i.i.d samples from an underlying Boltzmann distribution <d-cite key="noe2019boltzmann"></d-cite>, our goal is to learn a generative model $p_θ(C|G)$ to draw possible conformations from.
+We can formulate the problem of conformation generation as a conditional generative problem where we aim to generate stable conformations $$C$$  from a molecule’s graph $$G$$.  For each $$G$$ given its conformations $$C$$ as i.i.d samples from an underlying Boltzmann distribution <d-cite key="noe2019boltzmann"></d-cite>, our goal is to learn a generative model $$p_θ(C|G)$$ to draw possible conformations from.
 
 
 
@@ -66,7 +66,7 @@ We can formulate the problem of conformation generation as a conditional generat
 {% include figure.html path="assets/img/roto-trans.png" class="img-fluid" %}
 A visualisation of roto-translation equivariance, adapted from <d-cite key="xu2022geodiff"></d-cite>
  
-To generate stable molecular conformations, we need an algorithm that preserves roto-translation equivariance of the conformations that previous work has not focused on. To explain this property, let us delve into what equivariance is.  A representation $φ$ is equivariant with a transformation $g$ of the input if the transformation can be transferred to the representation output. Invariance is a special case of equivariance obtained when the transformation is the identity map <d-cite key="lenc2015understanding"></d-cite>.
+To generate stable molecular conformations, we need an algorithm that preserves roto-translation equivariance of the conformations that previous work has not focused on. To explain this property, let us delve into what equivariance is.  A representation $$φ$$ is equivariant with a transformation $$g$$ of the input if the transformation can be transferred to the representation output. Invariance is a special case of equivariance obtained when the transformation is the identity map <d-cite key="lenc2015understanding"></d-cite>.
 
 
 In the context of molecular conformations, we have to achieve the special case of equivariance in terms of rotation and translation, namely, roto-translation equivariance of the conformations which ensures that however the molecule is rotated or translated, the estimated (conditional) likelihood should be unaffected. GeoDiff considers the SE(3) Lie group which can be used to represent rotation and translation in 3D space <d-cite key="eade_2017"></d-cite>.
@@ -79,20 +79,20 @@ The diffusion model of GeoDiff, adapted from <d-cite key="xu2022geodiff"></d-cit
 
 
  **Legend**:
-- $C^{0}$ denotes the ground truth conformations
-- $C^{t}$, where $t = 1,···, T$ is the index for diffusion steps and $C^{t}$, is the sequence of latent variables with the same dimension
-- $q(C^{t}|C^{t−1})$ is the fixed posterior distribution
-- $p_θ(C^{t−1}|G, C^{t})$ are the Markov kernels through which the conformations are refined
+- $$C^{0}$$ denotes the ground truth conformations
+- $$C^{t}$$, where $$t = 1,···, T$$ is the index for diffusion steps and $$C^{t}$$, is the sequence of latent variables with the same dimension
+- $$q(C^{t}|C^{t−1})$$ is the fixed posterior distribution
+- $$p_θ(C^{t−1}|G, C^{t})$$ are the Markov kernels through which the conformations are refined
 
 ### A primer on Diffusion Models
-A diffusion probabilistic model <d-cite key="sohl2015deep"></d-cite>  can be described as a latent variable model with two processes: the forward and the reverse generative processes. Intuitively, the diffusion process progressively injects small noises into $C^{0}$, while the generative process learns to revert the diffusion process by gradually eliminating the noise to recover the ground truth. Diffusion models are trained by adding noise to the input, which the model then learns how to remove. 
+A diffusion probabilistic model <d-cite key="sohl2015deep"></d-cite>  can be described as a latent variable model with two processes: the forward and the reverse generative processes. Intuitively, the diffusion process progressively injects small noises into $$C^{0}$$, while the generative process learns to revert the diffusion process by gradually eliminating the noise to recover the ground truth. Diffusion models are trained by adding noise to the input, which the model then learns how to remove. 
 
 
-In this blog post, we use the GeoDiff implementation of diffusion models to explain how the diffusion model works and how it is being used for the geometric representation of molecules. The implementation of the diffusion model in GeoDiff is inspired by the DDPM paper <d-cite key="ho2020denoising"></d-cite>. To give a quick overview, the forward process $q$ transforms the original input into complete noise over a certain number of timesteps and follows a normal distribution; the $p_0$ involves denoising complete noise to the actual input using a neural network.
+In this blog post, we use the GeoDiff implementation of diffusion models to explain how the diffusion model works and how it is being used for the geometric representation of molecules. The implementation of the diffusion model in GeoDiff is inspired by the DDPM paper <d-cite key="ho2020denoising"></d-cite>. To give a quick overview, the forward process $$q$$ transforms the original input into complete noise over a certain number of timesteps and follows a normal distribution; the $$p_0$$ involves denoising complete noise to the actual input using a neural network.
 
 
 ### Forward process
-Let $q(\mathbf{C}^0)$ be the real data distribution of molecular conformation. We can sample from this distribution to get a conformation, $\mathbf{C}^0 \sim q(\mathbf{C}^0)$. We define the forward diffusion process which adds Gaussian noise at each time step $t$, according to a known variance schedule \beta_t which can be linear, quadratic, cosine, etc. as follows:
+Let $$q(\mathbf{C}^0)$$ be the real data distribution of molecular conformation. We can sample from this distribution to get a conformation, $$\mathbf{C}^0 \sim q(\mathbf{C}^0)$$. We define the forward diffusion process which adds Gaussian noise at each time step $$t$$, according to a known variance schedule \beta_t which can be linear, quadratic, cosine, etc. as follows:
 
 $$
 \begin{align}\tag{1}
@@ -100,9 +100,9 @@ q\left(\mathcal{C}^{1: T} \mid \mathcal{C}^0\right)=\prod_{t=1}^T q\left(\mathca
 \end{align}
 $$
 
-where $\quad q\left(\mathcal{C}^t \mid \mathcal{C}^{t-1}\right)=\mathcal{N}\left(\mathcal{C}^t ; \sqrt{1-\beta_t} \mathcal{C}^{t-1}, \beta_t I\right)$
+where $$\quad q\left(\mathcal{C}^t \mid \mathcal{C}^{t-1}\right)=\mathcal{N}\left(\mathcal{C}^t ; \sqrt{1-\beta_t} \mathcal{C}^{t-1}, \beta_t I\right)$$
 
-Instead of having to compute $q\left(\mathcal{C}^t \mid \mathcal{C}^{t-1}\right)$ at every timestep $t$, we could compute at an arbitrary timestep in closed form:
+Instead of having to compute $$q\left(\mathcal{C}^t \mid \mathcal{C}^{t-1}\right)$$ at every timestep $$t$$, we could compute at an arbitrary timestep in closed form:
 
 $$
 \begin{equation}\tag{2}
@@ -110,15 +110,15 @@ q\left(\mathcal{C}^t \mid \mathcal{C}^0\right)=\mathcal{N}\left(\mathcal{C}^t ; 
 \end{equation}
 $$
 
-where $\alpha_t=1-\beta_t$ and $\bar{\alpha}_t=\prod_{s=1}^t \alpha_s$
+where $$\alpha_t=1-\beta_t$$ and $$\bar{\alpha}_t=\prod_{s=1}^t \alpha_s$$
 
-Thus with a sufficiently large number of timesteps, the forward process could convert $\mathcal{C}^0$ to whitened isotropic Gaussian and so we could set $p\left(\mathcal{C}^T\right)$ as a standard Gaussian distribution. 
+Thus with a sufficiently large number of timesteps, the forward process could convert $$\mathcal{C}^0$$ to whitened isotropic Gaussian and so we could set $$p\left(\mathcal{C}^T\right)$$ as a standard Gaussian distribution. 
 
 
 ### Reverse Process
-The reverse process involved recovering the original conformation $\mathcal{C}^0$ from the white noise $\mathcal{C}^T$ .  We need the conditional distribution $p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{G}, \mathcal{C}^t\right)$ to sample some random Gaussian noise $\mathcal{C}^t$, and "denoise" gradually to end up with a sample from the real distribution $\mathcal{C}^0$.
+The reverse process involved recovering the original conformation $$\mathcal{C}^0$$ from the white noise $$\mathcal{C}^T$$ .  We need the conditional distribution $$p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{G}, \mathcal{C}^t\right)$$ to sample some random Gaussian noise $$\mathcal{C}^t$$, and "denoise" gradually to end up with a sample from the real distribution $$\mathcal{C}^0$$.
 
-However, the conditional distribution of $p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{G}, \mathcal{C}^t\right)$ is intractable as it requires knowing the distribution of all possible conformations in order to calculate this conditional probability. Hence, a neural network could be used to learn this conditional probability distribution, let's call it $p_\theta$, with $\theta$ being the parameters of the neural network, updated by gradient descent. Thus, we formulate the reverse process as a conditional Markov chain with learnable transitions:
+However, the conditional distribution of $$p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{G}, \mathcal{C}^t\right)$$ is intractable as it requires knowing the distribution of all possible conformations in order to calculate this conditional probability. Hence, a neural network could be used to learn this conditional probability distribution, let's call it $$p_\theta$$, with $$\theta$$ being the parameters of the neural network, updated by gradient descent. Thus, we formulate the reverse process as a conditional Markov chain with learnable transitions:
 
 $$
 \begin{align*}\tag{3}
@@ -126,13 +126,13 @@ p_\theta\left(\mathcal{C}^{0: T-1} \mid \mathcal{G}, \mathcal{C}^T\right)=\prod_
 \end{align*}
 $$
 
-where $\quad p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{G}, \mathcal{C}^t\right)=\mathcal{N}\left(\mathcal{C}^{t-1} ; \mu_\theta\left(\mathcal{G}, \mathcal{C}^t, t\right), \sigma_t^2 I\right)$
+where $$\quad p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{G}, \mathcal{C}^t\right)=\mathcal{N}\left(\mathcal{C}^{t-1} ; \mu_\theta\left(\mathcal{G}, \mathcal{C}^t, t\right), \sigma_t^2 I\right)$$
 
 
 
 
 
-Hence, the neural network in the reverse process needs to learn/represent the mean and variance. However, just like the DDPM paper, GeoDiff also lets the variance be user-defined and fixed, and $\mu_\theta$ is the neural network that estimates means.
+Hence, the neural network in the reverse process needs to learn/represent the mean and variance. However, just like the DDPM paper, GeoDiff also lets the variance be user-defined and fixed, and $$\mu_\theta$$ is the neural network that estimates means.
 
 GeoDiff uses a parametrisation trick inspired by the diffusion model implementation from the DDPM paper such that this parametrisation resembles Langevin dynamics and simplifies the diffusion model's variational bound to an objective that resembles denoising score matching. Moreover, in the context of molecular conformation generation, this parametrisation trick is analogous to the physical force fields <d-cite key="schutt2017schnet", "zhang2018deep", "hu2021forcenet", "shuaibi2021rotation" ></d-cite>, which also gradually push particles towards convergence around the equilibrium states, and is defined by the following equation:
 
@@ -142,15 +142,15 @@ $$
 \end{align*}
 $$
 
-where $\epsilon_\theta$ are neural networks with trainable parameters $\theta$.
+where $$\epsilon_\theta$$ are neural networks with trainable parameters $$\theta$$.
 
-Now, we need to make $\epsilon_\theta$ roto-translational equivariant which we elaborate on in the next section.
+Now, we need to make $$\epsilon_\theta$$ roto-translational equivariant which we elaborate on in the next section.
 
 ### Making the reverse process roto-translation equivariant
 
 Firstly, we need to assume the prior distribution of the conformations and the intermediary conformations generated during the forward process are systems with zero centre of mass (CoM) or CoM-free systems <d-cite key="kohler2020equivariant"></d-cite>. By considering CoM-free systems, moving the particles to zero CoM can always ensure translational invariance in the Markov kernels.
 
-GeoDiff employs the use of an equivariant convolutional layer, named graph field network (GFN) inspired by <d-cite key="thomas2018tensor", "satorras2021n"></d-cite>. In the $l$-th layer, GFN takes node embeddings $h_l \in \mathbb{R}^{n \times b}$ ($b$ denotes the feature dimension) and corresponding coordinate embeddings $x_l \in \mathbb{R}^{n \times 3}$ as inputs, and outputs $h_{l+1}$ and $x_{l+1}$ as follows:
+GeoDiff employs the use of an equivariant convolutional layer, named graph field network (GFN) inspired by <d-cite key="thomas2018tensor", "satorras2021n"></d-cite>. In the $$l$$-th layer, GFN takes node embeddings $$h_l \in \mathbb{R}^{n \times b}$$ ($$b$$ denotes the feature dimension) and corresponding coordinate embeddings $$x_l \in \mathbb{R}^{n \times 3}$$ as inputs, and outputs $$h_{l+1}$$ and $$x_{l+1}$$ as follows:
 
 $$
 \begin{align} \tag{5}
@@ -163,12 +163,12 @@ $$
 
 
 where 
-- $\Phi$ are feed-forward networks
-- $d_{ij}$ are interatomic distances
-- $\mathcal{N}(i)$ is the neighbourhood of the $i$-th node, which consists of both connected atoms and other ones within a radius threshold $\tau$. 
+- $$\Phi$$ are feed-forward networks
+- $$d_{ij}$$ are interatomic distances
+- $$\mathcal{N}(i)$$ is the neighbourhood of the $$i$$-th node, which consists of both connected atoms and other ones within a radius threshold $$\tau$$. 
 
 
-By introducing the neighbourhood function, we enable the model to accurately represent distant interactions between atoms, as well as the ability to handle partially disconnected molecular graphs. Initial embeddings $h_0$ are combinations of atom and timestep embeddings, and $x_0$ are atomic coordinates. A key change in GFN compared to a vanilla GNN is $x$ being updated as a combination of radial directions weighted by $\Phi_x$: $\mathbb{R}^b \rightarrow \mathbb{R}$ as seen in equation $(7)$. This allows the roto-translation equivariance property to be induced in the reverse process.
+By introducing the neighbourhood function, we enable the model to accurately represent distant interactions between atoms, as well as the ability to handle partially disconnected molecular graphs. Initial embeddings $$h_0$$ are combinations of atom and timestep embeddings, and $$x_0$$ are atomic coordinates. A key change in GFN compared to a vanilla GNN is $$x$$ being updated as a combination of radial directions weighted by $$\Phi_x$$: $$\mathbb{R}^b \rightarrow \mathbb{R}$$ as seen in equation $$(7)$$. This allows the roto-translation equivariance property to be induced in the reverse process.
 
 
 
@@ -177,24 +177,24 @@ By introducing the neighbourhood function, we enable the model to accurately rep
 Now, we need to set the training objective having considered the reverse process dynamics. We cannot compute the exact log-likelihood of the generative process, as it involves computing the likelihood of the observed molecular conformation given the parameters of the model. However, this likelihood is difficult to compute, as it would require integrating over all possible intermediate conformations, giving us a high-dimensional integral that cannot be solved analytically. Therefore, the authors have opted to maximize the variational lower bound (ELBO), as defined below:
 
 
-$\begin{aligned} \mathbb{E}\left[\log p_\theta\left(\mathcal{C}^0 \mid \mathcal{G}\right)\right] & =\mathbb{E}\left[\log \mathbb{E}_{q\left(\mathcal{C}^{1: T} \mid \mathcal{C}^0\right)} \frac{p_\theta\left(\mathcal{C}^{0: T} \mid \mathcal{G}\right)}{q\left(\mathcal{C}^{1: T} \mid \mathcal{C}^0\right)}\right] \\ & \geq-\mathbb{E}_q\left[\sum_{t=1}^T D_{\mathrm{KL}}\left(q\left(\mathcal{C}^{t-1} \mid \mathcal{C}^t, \mathcal{C}^0\right) \| p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{C}^t, \mathcal{G}\right)\right)\right]:=-\mathcal{L}_{\mathrm{ELBO}}\end{aligned}$
+$$\begin{aligned} \mathbb{E}\left[\log p_\theta\left(\mathcal{C}^0 \mid \mathcal{G}\right)\right] & =\mathbb{E}\left[\log \mathbb{E}_{q\left(\mathcal{C}^{1: T} \mid \mathcal{C}^0\right)} \frac{p_\theta\left(\mathcal{C}^{0: T} \mid \mathcal{G}\right)}{q\left(\mathcal{C}^{1: T} \mid \mathcal{C}^0\right)}\right] \\ & \geq-\mathbb{E}_q\left[\sum_{t=1}^T D_{\mathrm{KL}}\left(q\left(\mathcal{C}^{t-1} \mid \mathcal{C}^t, \mathcal{C}^0\right) \| p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{C}^t, \mathcal{G}\right)\right)\right]:=-\mathcal{L}_{\mathrm{ELBO}}\end{aligned}$$
 
-where $q\left(\mathcal{C}^{t-1} \mid \mathcal{C}^t, \mathcal{C}^0\right)$ is analytically tractable as $\mathcal{N}\left(\frac{\sqrt{\bar{\alpha}_{t-1}} \beta_t}{1-\bar{\alpha}_t} \mathcal{C}^0+\frac{\sqrt{\alpha_t}\left(1-\bar{\alpha}_{t-1}\right)}{1-\bar{\alpha}_t} \mathcal{C}^t, \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \beta_t\right)$. 
+where $$q\left(\mathcal{C}^{t-1} \mid \mathcal{C}^t, \mathcal{C}^0\right)$$ is analytically tractable as $$\mathcal{N}\left(\frac{\sqrt{\bar{\alpha}_{t-1}} \beta_t}{1-\bar{\alpha}_t} \mathcal{C}^0+\frac{\sqrt{\alpha_t}\left(1-\bar{\alpha}_{t-1}\right)}{1-\bar{\alpha}_t} \mathcal{C}^t, \frac{1-\bar{\alpha}_{t-1}}{1-\bar{\alpha}_t} \beta_t\right)$$. 
 
 
-Using the parametrisation trick in the reverse process as seen in equation $(4)$, the ELBO could be simplified by taking the KL divergences between Gaussians as weighted $\mathcal{L}_2$ distances between the means $\epsilon_\theta$ and $\epsilon^3$ as follows:
+Using the parametrisation trick in the reverse process as seen in equation $$(4)$$, the ELBO could be simplified by taking the KL divergences between Gaussians as weighted $$\mathcal{L}_2$$ distances between the means $$\epsilon_\theta$$ and $$\epsilon^3$$ as follows:
 $$
 \mathcal{L}_{\mathrm{ELBO}}=\sum_{t=1}^T \gamma_t \mathbb{E}_{\left\{\mathcal{C}^0, \mathcal{G}\right\} \sim q\left(\mathcal{C}^0, \mathcal{G}\right), \epsilon \sim \mathcal{N}(0, I)}\left[\left\|\epsilon-\epsilon_\theta\left(\mathcal{G}, \mathcal{C}^t, t\right)\right\|_2^2\right]
 $$
-where $\mathcal{C}^t=\sqrt{\bar{\alpha}_t} \mathcal{C}^0+\sqrt{1-\bar{\alpha}_t} \epsilon$. 
+where $$\mathcal{C}^t=\sqrt{\bar{\alpha}_t} \mathcal{C}^0+\sqrt{1-\bar{\alpha}_t} \epsilon$$. 
 
-The idea behind this objective is to independently sample chaotic conformations of different timesteps from $q\left(C^{t-1} \mid C^t, C^0\right)$, and use $\epsilon_\theta$ to approximate the noise vector $\epsilon$.
+The idea behind this objective is to independently sample chaotic conformations of different timesteps from $$q\left(C^{t-1} \mid C^t, C^0\right)$$, and use $$\epsilon_\theta$$ to approximate the noise vector $$\epsilon$$.
 
 
 
 ### Sampling
 
-Now, we can generate stable molecular conformations via sampling. Given a graph $\mathcal{G}$, its geometry $\mathcal{C}^0$ is generated by first sampling chaotic particles $\mathcal{C}^T \sim p\left(\mathcal{C}^T\right)$. For each timestep in the reverse process $t=T, T-$ $1, \cdots, 1$, we first shift the CoM of the conformation to zero, compute the transition means, $\mu_\theta\left(\mathcal{G}, \mathcal{C}^t, t\right)$, using equation $(4)$ and sample $\mathcal{C}^{t-1} \sim$ $p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{G}, \mathcal{C}^t\right)$. The sampling algorithm is given in pseudo-code below:
+Now, we can generate stable molecular conformations via sampling. Given a graph $$\mathcal{G}$$, its geometry $$\mathcal{C}^0$$ is generated by first sampling chaotic particles $$\mathcal{C}^T \sim p\left(\mathcal{C}^T\right)$$. For each timestep in the reverse process $$t=T, T-$$ $$1, \cdots, 1$$, we first shift the CoM of the conformation to zero, compute the transition means, $$\mu_\theta\left(\mathcal{G}, \mathcal{C}^t, t\right)$$, using equation $$(4)$$ and sample $$\mathcal{C}^{t-1} \sim$$ $$p_\theta\left(\mathcal{C}^{t-1} \mid \mathcal{G}, \mathcal{C}^t\right)$$. The sampling algorithm is given in pseudo-code below:
 
 
 
@@ -216,7 +216,7 @@ Now, we can generate stable molecular conformations via sampling. Given a graph 
 ## But why generative models?
 The purpose of prediciting molecular conformations is to enable human experts to analyse the properties of the molecules and understand how these properties affect the viability of a molecule as a drug candidate. Therefore, it is important that the molecular conformations generated are diverse to capture the different possible conformations that could occur in nature but the conformations generated should not deviate significantly such that the analysis is affected. To set a threshold for the different possible conformations, the standard metric used has been selecting conformations that are within a certain root-mean-square deviation (RMSD), say a few ångströms, of the true structure.
 
-However, the objective of maximizing the proportion of predictions with RMSD within some tolerance $\epsilon$ is not differentiable and thus, cannot be used for training with stochastic gradient descent. Instead, maximizing the expected proportion of predictions with RMSD < $\epsilon$ corresponds to maximizing the likelihood of the true structure under the model’s output distribution, in the limit as $\epsilon$ goes to 0. This concept inspires the development of a generative model, whose objective is to minimize an upper bound on the negative log-likelihood of observed molecular structures under the distribution of the model. As a result, the problem of molecular docking is treated as a task of learning a distribution over possible positions of a ligand molecule conditioned on the protein structure and a diffusion generative model is developed to represent this space. Therefore, this observation has motivated several works on the use of generative models for molecular conformation generation, such as GeoDiff.
+However, the objective of maximizing the proportion of predictions with RMSD within some tolerance $$\epsilon$$ is not differentiable and thus, cannot be used for training with stochastic gradient descent. Instead, maximizing the expected proportion of predictions with RMSD < $$\epsilon$$ corresponds to maximizing the likelihood of the true structure under the model’s output distribution, in the limit as $$\epsilon$$ goes to 0. This concept inspires the development of a generative model, whose objective is to minimize an upper bound on the negative log-likelihood of observed molecular structures under the distribution of the model. As a result, the problem of molecular docking is treated as a task of learning a distribution over possible positions of a ligand molecule conditioned on the protein structure and a diffusion generative model is developed to represent this space. Therefore, this observation has motivated several works on the use of generative models for molecular conformation generation, such as GeoDiff.
 
 
 ## Future work
