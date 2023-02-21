@@ -55,7 +55,7 @@ Therefore, we are only interested in conformations that fall in stable low-energ
 {% include figure.html path="assets/img/2022-12-01-diffusion-is-all-you-need/formulation.png" class="img-fluid" %}
 A formulation of the conformation generation problem, adapted from <d-cite key="xu2022geodiff"></d-cite>
 
-We can formulate the problem of conformation generation as a conditional generative problem where we aim to generate stable conformations $$C$$  from a molecule’s graph $$G$$.  For each $$G$$ given its conformations $$C$$ as i.i.d samples from an underlying Boltzmann distribution <d-cite key="noe2019boltzmann"></d-cite>, our goal is to learn a generative model $$p_θ(C|G)$$ to draw possible conformations from.
+We can formulate the problem of conformation generation as a conditional generative problem where we aim to generate stable conformations $$C$$  from a molecule’s graph $$G$$.  For each $$G$$ given its conformations $$C$$ as i.i.d samples from an underlying Boltzmann distribution <d-cite key="noe2019boltzmann"></d-cite>, our goal is to learn a generative model $$p_\theta(C|G)$$ to draw possible conformations from.
 
 
 
@@ -79,8 +79,8 @@ The diffusion model of GeoDiff, adapted from <d-cite key="xu2022geodiff"></d-cit
  **Legend**:
 - $$C^{0}$$ denotes the ground truth conformations
 - $$C^{t}$$, where $$t = 1,···, T$$ is the index for diffusion steps and $$C^{t}$$, is the sequence of latent variables with the same dimension
-- $$q(C^{t}|C^{t−1})$$ is the fixed posterior distribution
-- $$p_θ(C^{t−1}|G, C^{t})$$ are the Markov kernels through which the conformations are refined
+- $$q(C^{t}|C^{t-1})$$ is the fixed posterior distribution
+- $$p_\theta(C^{t-1}|G, C^{t})$$ are the Markov kernels through which the conformations are refined
 
 ### A primer on Diffusion Models
 A diffusion probabilistic model <d-cite key="sohl2015deep"></d-cite>  can be described as a latent variable model with two processes: the forward and the reverse generative processes. Intuitively, the diffusion process progressively injects small noises into $$C^{0}$$, while the generative process learns to revert the diffusion process by gradually eliminating the noise to recover the ground truth. Diffusion models are trained by adding noise to the input, which the model then learns how to remove. 
@@ -196,18 +196,17 @@ Now, we can generate stable molecular conformations via sampling. Given a graph 
 
 
 
-\begin{aligned}
-& \hline  \textbf { Sampling Algorithm of GeoDiff } \\
-& \textbf { Input} \text{: the molecular graph } \mathcal{G} \text {, the learned reverse model } \epsilon_\theta . \\
-& \textbf { Output} \text{: the molecular conformation } \mathcal{C} \text {. } \\
-& \text { 1: Sample } \mathcal{C}^T \sim p\left(\mathcal{C}^T\right)=\mathcal{N}(0, I) \\
-& \text { 2: for } s=T, T-1, \cdots, 1 \text { do } \\
-& \text { 3: } \quad \text { Shift } \mathcal{C}^s \text { to zero CoM } \\
-& \text { 4: } \quad \text { Compute } \mu_\theta\left(\mathcal{C}^s, \mathcal{G}, s\right) \text { from } \epsilon_\theta\left(\mathcal{C}^s, \mathcal{G}, s\right) \text { using equation } 4 \\
-& \text { 5: } \quad \text { Sample } \mathcal{C}^{s-1} \sim \mathcal{N}\left(\mathcal{C}^{s-1} ; \mu_\theta\left(\mathcal{C}^s, \mathcal{G}, s\right), \sigma_t^2 I\right) \\
-& \text { 6: end for } \\
-& \text { 7: return } \mathcal{C}^0 \text { as } \mathcal{C}
-\end{aligned}
+| Algorithm 1 Sampling Algorithm of GEODIFF                                                                                                                                 |
+|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Input: the molecular graph $$\mathcal{G}$$, the learned reverse model $$\epsilon_\theta$$.                                                                                |
+| Output: the molecular conformation $$\mathcal{C}$$.                                                                                                                       |
+| 1: Sample $$\mathcal{C}^T \sim p\left(\mathcal{C}^T\right)=\mathcal{N}(0, I)$$                                                                                            |
+| 2: for $$s=T, T-1, \cdots, 1$$ do                                                                                                                                         |
+| 3: $$\quad$$ Shift $$\mathcal{C}^s$$ to zero CoM                                                                                                                          |
+| 4: $$\quad$$ Compute $$\mu_\theta\left(\mathcal{C}^s, \mathcal{G}, s\right)$$ from $$\epsilon_\theta\left(\mathcal{C}^s, \mathcal{G}, s\right)$$ using equation 4         |
+| 5: $$\quad$$ Sample $$\mathcal{C}^{s-1} \sim \mathcal{N}\left(\mathcal{C}^{s-1} ; \mu_\theta\left(\mathcal{C}^{\mathcal{s}}, \mathcal{G}, s\right), \sigma_t^2 I\right)$$ |
+| 6: end for                                                                                                                                                                |
+| 7: return $$\mathcal{C}^0$$ as $\mathcal{C}$$                                                                                                                             |
 
 
 
