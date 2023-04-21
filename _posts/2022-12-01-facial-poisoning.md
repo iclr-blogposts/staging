@@ -8,7 +8,10 @@ htmlwidgets: true
 
 # Anonymize when submitting
 authors:
-  - name: Anonymous
+  - name: Rajat Sahay
+    url: "https://rajatsahay.github.io/"
+    affiliations:
+      name: Rochester Institute of Technology, USA
 
 bibliography: 2022-12-01-facial-poisoning.bib
 
@@ -89,9 +92,7 @@ The model trainer begins by collecting a public dataset of unperturbed images. I
 
 With access to both unperturbed images and their corresponding poisoned counterparts, the trainer can teach a model to produce similar embeddings for both sets of pictures, encouraging the model to adaptively learn robust features. This is done hoping that this robustness would eventually generalize to perturbations' applied to other images.
 
-<blockquote>
 While the above strategy works in theory, it requires direct intervention from model trainers by using the 'clean' images provided by them. This would not scale well, especially for large-scale facial recognition systems that look at millions of photographs. However, this attack could also occur without the trainers' explicit involvement. There is a high possibility that some users already have unperturbed images of themselves on the Web; either they forgot to perturb some pictures, or they were uploaded by someone else. Feature extractors trained on these pictures would then be encouraged to learn robust features.
-</blockquote>
 
 **Results:** All three attacks were evaluated against a non-robust _WebFace_ model to establish a baseline. They were found to have a misclassification rate of 55-77% for users who poisoned their pictures online. This compares starkly to a rate of 8% for unprotected users. However, when trained adaptively, the misclassification rate for all users - protected or unprotected - dropped to 5-8%, and all poisoning attacks were rendered ineffective.
 ***
