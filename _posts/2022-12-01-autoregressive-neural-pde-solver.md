@@ -8,7 +8,10 @@ htmlwidgets: true
 
 # Anonymize when submitting
 authors:
-  - name: Anonymous
+    - name: Yolanne Lee
+      url: "https://www.linkedin.com/in/yolannelee/"
+      affiliations:
+        name: University College London
 
 # must be the exact same name as your blogpost
 bibliography: 2022-12-01-autoregressive-neural-pde-solver.bib
@@ -28,7 +31,11 @@ toc:
     - name: The Pushforward Trick and Temporal bundling
     - name: Network Architecture
     - name: Results
+    - name: Comparing Interpretations
   - name: Conclusion
+    - name: Future Directions
+    - name: Ongoing Challenges
+    - name: Remarks
 
 # Below is an example of injecting additional post-specific styles.
 # This is used in the 'Layouts' section of this post.
