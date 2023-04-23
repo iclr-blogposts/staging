@@ -33,6 +33,7 @@ toc:
     - name: Results
     - name: Comparing Interpretations
   - name: Conclusion
+    subsections:
     - name: Future Directions
     - name: Ongoing Challenges
     - name: Remarks
