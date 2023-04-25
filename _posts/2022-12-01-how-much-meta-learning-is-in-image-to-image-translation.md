@@ -107,7 +107,7 @@ To measure the invariance of the trained model to the applied transformation Zho
 
 If the learner is invariant to the transformation, the predicted probability distribution over class labels should be identical for the transformed and untransformed images. In that case, the KLD should be zero and greater than zero otherwise. The higher the expected KL-divergence, the more the applied transformation impacts the network's predictions.
 
-The result: eKLD falls with class size. This implies that the CNN does not learn that there are the same nuisance transformations on all images and therefore does not transfer this knowledge to the classes with less training data. A CNN learns invariance **separately for each class**(see also Zhou et al.<d-cite key="DBLP:conf/iclr/ZhouTRKPHF22"></d-cite> section 3.2). 
+The result: eKLD falls with class size. This implies that the CNN does not learn that there are the same nuisance transformations on all images and therefore does not transfer this knowledge to the classes with less training data. A CNN learns invariance **separately for each class** (see also Zhou et al.<d-cite key="DBLP:conf/iclr/ZhouTRKPHF22"></d-cite> section 3.2). 
 
 {% include figure.html path="assets/img/2022-12-01-how-much-meta-learning-is-in-image-to-image-translation/EKLD.svg" class="img-fluid" %}
 
@@ -119,7 +119,7 @@ You might think this is a cool experiment, but how is it related to meta-learnin
 And, indeed, in contemporary literature meta-learning is often conceived of as learning multiple tasks. In an much-cited 2022 survey, Hosepdales et al. write:
 >Meta-learning is most commonly understood as learning to learn; the process of improving a learning algorithm over multiple learning episodes. In contrast, conventional ML improves model predictions over multiple data instances. <d-cite key="DBLP:journals/pami/HospedalesAMS22"></d-cite>
 
-In another popular survey Vanschoren [2018] says:
+In another popular survey Vanschoren [2018] describes the meta-learning process as follows:
 >First, we need to collect meta-data that describe prior learning tasks and previously learned models. They comprise the exact algorithm configurations used to train the models, including hyperparameter settings, pipeline compositions and/or network architectures, the resulting model evaluations, such as accuracy and training time, the learned model parameters, such as the trained weights of a neural net, as well as measurable properties of the task itself, also known as meta-features.<d-cite key="vanschoren2018meta"></d-cite>
 
 Francheschi et al. [2018] basically equate meta-learning (ML) with [hyperparameter optimization](https://en.wikipedia.org/wiki/Hyperparameter_optimization) (HO):
