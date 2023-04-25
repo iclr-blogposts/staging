@@ -308,7 +308,7 @@ When applied to a single domain MUNIT *does* meta-learn as it combines informati
 
 That invariance transfer and GIT are meta-learning and that MUNIT is a meta-learner is important. Granted, it is not especially hard to see that invariance transfer is a form of "learning to learn" or that Image-to-Image translation is essentially a mechanism to decompose class-specific form general features. 
 
-However, because contemporary meta-learning has been narrowly cast as "improving a learning algorithm over multiple learning episodes"<d-cite key="DBLP:journals/pami/HospedalesAMS22"> and "nesting two search problems"<d-cite key="DBLP:conf/icml/FranceschiFSGP18"> it is hard to recognize GIT as meta-learning. 
+However, because contemporary meta-learning has been narrowly cast as "improving a learning algorithm over multiple learning episodes"<d-cite key="DBLP:journals/pami/HospedalesAMS22"></d-cite> and "nesting two search problems"<d-cite key="DBLP:conf/icml/FranceschiFSGP18"></d-cite> it is hard to recognize GIT as meta-learning. 
 
 In these authors opinion this is not GIT's fault, but a sign that meta-learning has recently been conceived of too narrowly. Zhou et al.'s<d-cite key="DBLP:conf/iclr/ZhouTRKPHF22"></d-cite> experiment is a beautiful illustration of this showing that something as general as a GAN loss term, with appropriate modifications, can be used to meta-learn. 
 
