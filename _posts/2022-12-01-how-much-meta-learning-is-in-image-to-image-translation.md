@@ -163,7 +163,7 @@ Zhou et al.<d-cite key="DBLP:conf/iclr/ZhouTRKPHF22"></d-cite> find that when th
 
 So MUNIT decomposes the example-specific information, e.g., whether something is an apple or a house cat, from the meta-information, i.e., nuisance transformations applied to the entire dataset. When we add more classes, it has more data and can better learn the transformation distribution $T(\cdot &#124;x)$. Does solving a meta-learning problem make MUNIT a meta-learner? Let's look at the relationship MUNIT has with contemporary meta-learners 
 
-## How much meta-learning is in MUNIT ?
+## How much meta-learning is in MUNIT?
 To see how well MUNIT fits the definition of meta-learning, let's see what the same survey papers we consulted earlier consider the structure of a meta-learning algorithm. 
 
 ### Part 1: The task-centered view
