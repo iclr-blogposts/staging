@@ -310,16 +310,16 @@ That invariance transfer and GIT are meta-learning and that MUNIT is a meta-lear
 
 However, because contemporary meta-learning has been narrowly cast as "improving a learning algorithm over multiple learning episodes"<d-cite key="DBLP:journals/pami/HospedalesAMS22"> and "nesting two search problems"<d-cite key="DBLP:conf/icml/FranceschiFSGP18"> it is hard to recognize GIT as meta-learning. 
 
-In these authors opinion this is not GIT's fault, but a sign that meta-learning has recently been conceived of too narrowly. Zhou et al.'s experiment is a beautiful illustration of this showing that something as general as a GAN loss term, with appropriate modifications, can be used to meta-learn. 
+In these authors opinion this is not GIT's fault, but a sign that meta-learning has recently been conceived of too narrowly. Zhou et al.'s [2022] <d-cite key="DBLP:conf/iclr/ZhouTRKPHF22"></d-cite> experiment is a beautiful illustration of this showing that something as general as a GAN loss term, with appropriate modifications, can be used to meta-learn. 
 
 A too-narrow conception goes further than obscuring some experiment's significance though: Meta-learning as a field has recently struggled to compete with less specialized architectures<d-cite key="DBLP:journals/corr/abs-2104-02638"></d-cite><d-cite key="DBLP:journals/corr/abs-1904-04232"></d-cite>. Multi-task datasets are hard to scale <d-cite key="triantafillou2019meta"></d-cite>, as are episode rollouts <d-cite key="DBLP:conf/icml/FinnAL17"></d-cite>. Meanwhile, large-scale architectures have shown impressive zero-shot capabilities<d-cite key="dosovitskiy2021an"><d-cite key="pmlr-v139-radford21a">.
 
-Zhou et al.'s contributions are therefore important as a challenge to the status quo in meta-learning. MUNIT seems to meta-learn by embedding class (and class-specific features) in one space and transformation-specific features (e.g., how bright/dark) in another. This seems to point to a conception of meta-learning as finding mutual information between sets of examples (not necessarily defined by class or transformation feature but by arbitrary concepts) or hierarchies of such sets. Examining and designing mechanisms by which such behavior can be evoked is an exciting direction for future work.
+Zhou et al.'s [2022] <d-cite key="DBLP:conf/iclr/ZhouTRKPHF22"></d-cite> contributions are therefore important as a challenge to the status quo in meta-learning. MUNIT seems to meta-learn by embedding class (and class-specific features) in one space and transformation-specific features (e.g., how bright/dark) in another. This seems to point to a conception of meta-learning as finding mutual information between sets of examples (not necessarily defined by class or transformation feature but by arbitrary concepts) or hierarchies of such sets. Examining and designing mechanisms by which such behavior can be evoked is an exciting direction for future work.
 
 ## Key Takeaways
 
 1. Zhou et al.'s experiments show that the meta-learning setting can be formulated more broadly than learning an explicit task distribution, suggesting that specialized datasets are not necessary.
 
-2. When thinking about meta-learning, thinking about mutual information between batches of examples (not necessarily aligned with class labels) and how to extract it trumps thinking about distinct tasks.
+2. Using GIT, Zhou et al. show that meta-learning algorithms can come in shapes other than inner and outer training loops. Analysis suggests that countervailing loss terms facilitate the decomposition of meta-features from task-specific features.
 
-3. Using GIT, Zhou et al. show that meta-learning algorithms can come in shapes other than inner and outer training loops. Analysis suggests that countervailing loss terms facilitate the decomposition of meta-features from task-specific features.
+3. Our discussion of Zhou et al.'s paper suggests, that when thinking about meta-learning, thinking about mutual information between batches of examples (not necessarily aligned with class labels) and how to extract it trumps thinking about distinct tasks.
