@@ -1,8 +1,7 @@
 ---
 layout: distill
 title: Strategies for Classification Layer Initialization in Model-Agnostic Meta-Learning
-description: [This blog post discusses different strategies for initializing the classification layers parameters before 
-fine-tuning on a new task in Model-Agnostic Meta-Learning.]
+description: [This blog post discusses different strategies for initializing the classification layers parameters before fine-tuning on a new task in Model-Agnostic Meta-Learning. Each of the strategies in question has emerged from a different problem, and it will be analyzed whether one approach can solve the problems addressed by the other approaches.]
 date: 2022-12-01
 htmlwidgets: true
 
@@ -15,7 +14,7 @@ authors:
    - name: Nys Tjade Siegel
      url: "https://www.linkedin.com/in/nys-tjade-siegel-b06a1718a?originalSubdomain=de"
      affiliations:
-       name: TU Berlin
+       name: ALU Freiburg
    - name: Thomas Goerttler
      url: "https://scholar.google.de/citations?user=ppQIwpIAAAAJ&hl=de"
      affiliations:
