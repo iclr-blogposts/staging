@@ -399,34 +399,37 @@ One key example which limits grid-based classical solvers is the <span style="co
       <td>Classical FDM/FEM/FVM</td>
       <td>general</td>
       <td>general</td>
-      <td>poly((1/ε)^d)</td>
+      <td>poly\(((\frac{1}{\varepsilon})^{d})\)</td>
     </tr>
     <tr>
       <td>Adaptive FDM/FEM <d-cite key="babuskaHpVersionFinite1987"></d-cite></td>
       <td>general</td>
       <td>general</td>
-      <td>poly((log (1/ε))^d)</td>
+      <td>poly\(((\log(\frac{1}{\varepsilon}))^{d})\)</td>
     </tr>
     <tr>
       <td>Spectral method <d-cite key="gheorghiuSpectralMethodsDifferential2007,shenSpectralMethodsAlgorithms2011"></d-cite></td>
       <td>general</td>
       <td>general</td>
-      <td>poly((log (1/ε))^d)</td>
+      <td>poly\(((\log(\frac{1}{\varepsilon}))^{d})\)</td>
     </tr>
     <tr>
       <td>Sparse grid FDM/FEM <d-cite key="bungartzSparseGrids2004,zengerSparseGrids1991"></d-cite></td>
       <td>general</td>
       <td>general</td>
-      <td>poly((1/ε)(log(1/ε))^d)</td>
+      <td>poly\(((\frac{1}{\varepsilon})(\log(\frac{1}{\varepsilon}))^{d})\)</td>
     </tr>
     <tr>
       <td>Sparse grid spectral method <d-cite key="shenEfficientSpectralSparse2010,shenEfficientSpectralSparse2012"></d-cite></td>
       <td>elliptic</td>
       <td>general</td>
-      <td>poly(log (1/ε)(log log(1/ε))^d)</td>
+      <td>poly\((\log(\frac{1}{\varepsilon})(\log \log(\frac{1}{\varepsilon}))^{d})\)</td>
     </tr>
   </tbody>
 </table>
+<div class="caption">
+Table showing (polynomial) computational complexity of some common numerical methods, including finite difference method (FDM), finite elements method (FEM), finite volume method (FVM), spectral method, and some of their variants for \(d\)-dimensional PDEs with error tolerance ε. Note that every method has an exponential dependency on the dimenAdapted from <d-cite key="childsHighprecisionQuantumAlgorithms2021"></d-cite>.
+</div>
 
 ### Neural Solvers
 <p>
