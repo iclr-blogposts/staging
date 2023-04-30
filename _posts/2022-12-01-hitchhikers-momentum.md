@@ -7,7 +7,10 @@ htmlwidgets: true
 
 # Anonymize when submitting
 authors:
-  - name: Anonymous
+  - name: Fabian Pedregosa
+  - url: https://fa.bianp.net
+    affiliations:
+      name: Google Research
 
 # authors:
 #   - name: Albert Einstein
@@ -25,6 +28,7 @@ authors:
 
 # must be the exact same name as your blogpost
 bibliography: 2022-12-01-hitchhikers-momentum.bib  
+
 
 # Add a table of contents to your post.
 #   - make sure that TOC names match the actual section names
@@ -206,7 +210,11 @@ _styles: >
     text-decoration: underline;
   }
 ---
-  
+
+
+> Dedicated to the memory of Boris Polyak <a href="https://memorialsource.com/memorial/polyak">(May 4, 1935 - February 3, 2023)</a>, inventor of this method and pioneer of the field of optimization.
+
+
 <!-- some latex shortcuts -->
 <div style="display: none">
 $$
@@ -257,14 +265,30 @@ difference between the current and the previous iterate $$(\xx_{t} - \xx_{t-1})$
 
 Despite its simplicity, gradient descent with momentum exhibits unexpectedly rich dynamics that we'll explore on this post. 
 
+### History and relatex work
 
-The origins of momentum can be traced back to Frankel's method in the 1950s for solving linear system of equations.<d-cite key="frankel1950convergence"></d-cite> It was later generalized by Boris Polayk to non-quadratic objectives<d-cite key="polyak1964some"></d-cite>. In recent years there has been a resurgence in interest in this venerable method, as a stochastic variant of this method, where the gradient is replaced by a stochastic estimate, is one of the most popular methods for deep learning. This has led in recent years to a flurry fo research --and improved understanding -- of this stochastic variant. Although this blog posts limits itself with the deterministic variant, the interested reader is encouraged to explore following references. A good starting point is the paper by <a href="https://arxiv.org/abs/1712.07628">Sutskever et al.</a>,<d-cite key="sutskever2013importance"></d-cite> which was among the firsts to highlight the importance of momentum for deep learning optimization. More recent progress include an analysis of the last iteration of the method by <a href="https://arxiv.org/abs/2104.09864">Tao et al.</a><d-cite key="tao2021the"></d-cite> and a paper by <a href="https://arxiv.org/abs/2106.07587">Liu et al.</a><d-cite key="Liu2020Accelerating"></d-cite> that develops accelerated variants for over-parameterized models.
+The origins of momentum can be traced back to Frankel's method in the 1950s for solving linear system of equations.<d-cite key="frankel1950convergence"></d-cite> It was later generalized by Boris Polyak to non-quadratic objectives<d-cite key="polyak1964some"></d-cite>.
+While the quadratic case is by now well understood, the general strongly convex case has instead had some fascinating developments in the last years.
+In the convex (but not strongly convex) case, <a href="https://arxiv.org/pdf/1412.7457.pdf">Ghadimi et al.</a><d-cite key="ghadimi2015global"></d-cite> showed the global convergence of the method in 2015.
+One year later, Lessard, Recht and Packard<d-cite key="lessard2016analysis"></d-cite> surprised the community with an example of a on-dimensional Lipschitz gradient and strongly convex function where the heavy-ball method (with a specific choice of parameters) doesn't converge nor diverge, but cycles instead.
 
 
-Coming back to the subject of our post, the (non-stochastic) gradient descendent with momentum method, a paper that also explores the dynamics of momentum is Gabriel Goh's <a href="https://distill.pub/2017/momentum/">Why Momentum Really Works</a>.<d-cite key="goh2017momentum"></d-cite> There are subtle but important differences between both analysis. The landscape described in the section <a href="https://distill.pub/2017/momentum/#momentum2D">"The Dynamics of Momentum"</a> describe the improvement along the direction _of a single eigenvector_. This partial view produces some misleading conclusions. For example, along the direction of a single eigenvector, the largest improvement is achieved with zero momentum and a step-size of 1 over the associated eigenvalue. This conclusion however doesn't hold in higher dimensions, where as we will see, the momentum term that yields the fastest convergence is non-zero.
 
 
-## How fast is Momentum?
+A paper that also explores the dynamics of momentum is Gabriel Goh's excellent <a href="https://distill.pub/2017/momentum/">Why Momentum Really Works</a>.<d-cite key="goh2017momentum"></d-cite> There are subtle but important differences between both analysis. The landscape described in the section <a href="https://distill.pub/2017/momentum/#momentum2D">"The Dynamics of Momentum"</a> describe the improvement along the direction _of a single eigenvector_. This partial view produces some misleading conclusions. For example, along the direction of a single eigenvector, the largest improvement is achieved with zero momentum and a step-size of 1 over the associated eigenvalue. This conclusion however doesn't hold in higher dimensions, where as we will see, the momentum term that yields the fastest convergence is non-zero.
+
+
+A __stochastic variant__ of this method, where the gradient is replaced by a stochastic estimate, is one of the most popular methods for deep learning. This has led in recent years to a flurry of research --and improved understanding -- of this stochastic variant.
+Although we won't be analyzing the stochastic variant, due to its importance, let us briefly mention some recent works.
+
+
+One of the first works to highlight the importance of momentum for training deep neural networks is the 2013 paper by <a href="https://arxiv.org/abs/1712.07628">Sutskever et al</a>.<d-cite key="sutskever2013importance"></d-cite>
+Some recent progress in the field has been possible by viewing the stochastic variant as an averaging method.<d-cite key="flammarion2015averaging"></d-cite> This has led to the development of improved last-iterate convergence rates <d-cite key="taylor2019stochastic"></d-cite> <d-cite key="tao2021the"></d-cite> and a better understanding of it's behavior in the non-convex setting.<d-cite key="defazio2020momentum"></d-cite>
+Another fruitful line of work has been to consider the <i>overparametrized</i> (or interpolation) setting, where the variance of the updates vanishes at the optimum. In this regime, different momentum-like methods have been shown to enjoy a faster worst-case convergence rate than SGD.<d-cite key="Liu2020Accelerating"></d-cite> <d-cite key="vaswani2019fast"></d-cite>
+
+
+
+## How Fast is Momentum?
 
 Momentum is _fast_. So fast that it's often the default choice of machine learning practitioners. But can we quantify this more precisely?
 
@@ -272,7 +296,7 @@ Throughout the post we'll assume that our objective function $$f$$ is a quadrati
 \begin{equation}\label{eq:opt}
 f(\xx) \defas \frac{1}{2}(\xx - \xx^\star) \HH (\xx - \xx^\star)~,
 \end{equation}
-where $$\HH$$ is a symmetric positive definite matrix and $$\xx^\star$$ is the minimizer of the objective. We'll assume that the eigenvalues of $$\HH$$ are in the interval $$[\mu, L]$$.
+where $$\HH$$ is a symmetric positive definite matrix and $$\xx^\star$$ is the minimizer of the objective. We'll assume that the eigenvalues of $$\HH$$ are in the interval $$[\mu, L]$$, where $$\mu$$ is strictly positive by the PSD assumption.
 
 
 The measure we'll use to quantify the speed of convergence is the rate of convergence. This is the worst-case relative improvement in the iterate suboptimality at iteration $$t$$, defined as
@@ -292,7 +316,7 @@ This is the quantity we'll be discussing throughout the post and what we'll use 
 
 ### A connection between optimization methods and polynomials
 
-To compute easily the asymptotic rate of convergence for all admissible values of step-size and momentum, we'll use a connection between optimization of quadratic functions and the theory of orthogonal polynomials. This theory was extensively used in the early days of numerical analysis <d-cite key="Rutishauser1959"></d-cite> and provides an elegant and simple way to compute asymptotic rates (and non-asymptotic ones, althought not the topic of this blog post) from known results in the theory of orthogonal polynomials. We favor this technique for its simplicity and elegance, although ones ones that also be used with identical results. Other techniques include the linear operator technique used by Polyak,<d-cite key="polyak1964some"></d-cite> the estimate sequences technique pioneered by Nesterov<d-cite key="nesterov1983method"></d-cite> or the use of Lyapunov functions.<d-cite key="JMLR:v22:20-195">
+To compute easily the asymptotic rate of convergence for all admissible values of step-size and momentum, we'll use a connection between optimization of quadratic functions and the theory of orthogonal polynomials. This theory was extensively used in the early days of numerical analysis <d-cite key="Rutishauser1959"></d-cite> and provides an elegant and simple way to compute asymptotic rates (and non-asymptotic ones, although not the topic of this blog post) from known results in the theory of orthogonal polynomials. We favor this technique for its simplicity and elegance, although ones that also be used with identical results. Other techniques include the linear operator technique used by Polyak,<d-cite key="polyak1964some"></d-cite> the estimate sequences technique pioneered by Nesterov<d-cite key="nesterov1983method"></d-cite> or the use of Lyapunov functions.<d-cite key="JMLR:v22:20-195">
 
 
 
@@ -312,7 +336,7 @@ Then we can write the suboptimality at iteration \(t\) as
 \begin{equation}
 \xx_t - \xx^\star = P_t(\HH) \left( \xx_0 - \xx^\star \right) \,,
 \end{equation}
-where \(P_t(\HH)\) is the matrix obtained from evaluating the (originally rel-valued) polynomial \(P_t\) at the matrix \(\HH\).
+where \(P_t(\HH)\) is the matrix obtained from evaluating the (originally real-valued) polynomial \(P_t\) at the matrix \(\HH\).
 </p>
 
 
